@@ -96,13 +96,29 @@ body{
 .phead em{margin-left:auto;font-style:normal;color:var(--cyan);letter-spacing:1px}
 
 /* ---------- MISSION BRIEF ---------- */
-.brief{padding:9px 12px;border-bottom:1px solid var(--line);flex:0 0 auto;background:rgba(4,9,15,.5)}
+.brief{padding:10px 12px;border-bottom:1px solid var(--line);flex:0 0 auto;background:rgba(4,9,15,.5);max-height:52%;overflow-y:auto;scrollbar-width:thin}
 .brief h2{font-size:14px;font-weight:600;color:var(--ink);letter-spacing:.2px;display:flex;align-items:center;gap:7px}
 .brief h2 u{text-decoration:none;font-family:var(--mono);font-size:9px;color:var(--void);background:var(--neon);padding:2px 6px;border-radius:2px;letter-spacing:1px}
-.brief p{font-size:12px;color:var(--dim);margin-top:4px;line-height:1.5}
-.goals{margin-top:7px;display:flex;flex-direction:column;gap:3px}
-.goals li{list-style:none;font-size:11.5px;color:#9fc0d8;display:flex;gap:7px;line-height:1.45}
+.brief p{font-size:12.5px;color:#8fb0c8;margin-top:5px;line-height:1.55}
+.glabel{margin-top:9px;font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--dim);
+  display:flex;align-items:center;gap:8px}
+.glabel::after{content:"";flex:1;height:1px;background:var(--line)}
+.goals{margin-top:5px;display:flex;flex-direction:column;gap:3px}
+.goals li{list-style:none;font-size:12.5px;color:#b6d2e6;display:flex;gap:8px;line-height:1.55;margin-top:3px}
 .goals li b{font-family:var(--mono);color:var(--cyan);font-weight:400;flex:0 0 auto;font-size:10px;padding-top:2px}
+.rulebox{margin-top:8px;padding:7px 10px;border-left:3px solid var(--amber);border-radius:3px;
+  background:rgba(255,182,39,.07);font-size:11.5px;line-height:1.5;color:#e0c78a}
+.meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.meta span{font-family:var(--mono);font-size:9px;letter-spacing:.8px;color:var(--dim);
+  border:1px solid var(--line);border-radius:2px;padding:3px 7px}
+.meta span.hot{color:var(--amber);border-color:#4a3a14}
+.checks{margin-top:16px;display:flex;flex-direction:column;gap:6px}
+.checks div{display:flex;align-items:center;gap:9px;font-size:12px;color:var(--dim);
+  border:1px solid var(--line);border-radius:3px;padding:8px 11px;background:rgba(8,15,23,.6)}
+.checks div b{font-family:var(--mono);font-size:13px;flex:0 0 auto;width:16px;text-align:center}
+.checks div.ok{color:#9fc0d8;border-color:var(--neon-d)}.checks div.ok b{color:var(--neon)}
+.checks div.no{color:#ffc2ce;border-color:#4a2430}.checks div.no b{color:var(--red)}
+.checks div.wait b{color:var(--amber)}
 canvas#sim{flex:1 1 auto;width:100%;min-height:0;display:block}
 
 /* ---------- FLOWCHART ---------- */
@@ -138,7 +154,7 @@ canvas#sim{flex:1 1 auto;width:100%;min-height:0;display:block}
 }
 .block .ic{font-size:14px;flex:0 0 auto;width:18px;text-align:center;filter:saturate(1.2)}
 .block .tx{flex:1 1 auto;min-width:0}
-.block .tx small{display:block;font-family:var(--mono);font-size:8.5px;letter-spacing:1.3px;color:var(--dim);margin-top:2px}
+.block .tx small{display:block;font-family:var(--thai);font-size:10.5px;line-height:1.35;letter-spacing:0;color:#7fa3bd;margin-top:3px}
 .block[data-kind="cond"]{border-left-color:var(--amber)}
 .block[data-kind="io"]{border-left-color:var(--violet)}
 .block[data-kind="act"]{border-left-color:var(--cyan)}
@@ -182,17 +198,36 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
 .mini:hover{border-color:var(--red);color:#fff;background:#26141c}
 
 /* ---------- CAMERA ---------- */
-#cam{position:fixed;left:10px;bottom:10px;width:176px;z-index:55;border:1px solid var(--line);border-radius:5px;overflow:hidden;background:#050a10;display:none}
+/* กล้องเต็มจอ: วิดีโอเป็นฉากหลัง โครงมือลอยทับ UI */
+#cam{position:fixed;inset:0;z-index:1;overflow:hidden;display:none;background:#03060a}
 #cam.on{display:block}
-#cam video{width:100%;display:block;transform:scaleX(-1);opacity:.55}
-#cam canvas{position:absolute;inset:0;width:100%;height:100%}
-#cam .lab{position:absolute;left:0;right:0;bottom:0;font-family:var(--mono);font-size:8.5px;letter-spacing:1px;padding:3px 6px;background:rgba(4,9,15,.85);color:var(--dim);display:flex;justify-content:space-between}
-#cam .lab b{color:var(--neon)}
-#handCursor{position:fixed;z-index:79;width:34px;height:34px;margin:-17px 0 0 -17px;pointer-events:none;display:none}
+#cam video{width:100%;height:100%;object-fit:fill;display:block;
+  transform:scaleX(-1.47) scaleY(1.43);opacity:var(--camop,.2);filter:saturate(.55) contrast(1.08)}
+#camCv{position:fixed;inset:0;z-index:78;pointer-events:none;display:none;opacity:.85}
+#camCv.on{display:block}
+#camHud{position:fixed;left:12px;bottom:12px;z-index:78;display:none;align-items:center;gap:9px;
+  font-family:var(--mono);font-size:10px;letter-spacing:1px;padding:7px 10px;border:1px solid var(--line);
+  border-radius:4px;background:rgba(4,9,15,.88);color:var(--dim)}
+#camHud.on{display:flex}
+#camHud b{color:var(--neon);font-weight:600}
+#camHud button{padding:3px 7px;font-size:11px;letter-spacing:0}
+/* เคอร์เซอร์มือ: ใหญ่ เห็นชัดข้ามพื้นหลังทุกแบบ */
+#handCursor{position:fixed;z-index:79;width:66px;height:66px;margin:-33px 0 0 -33px;pointer-events:none;display:none}
 #handCursor.on{display:block}
-#handCursor .ring{position:absolute;inset:0;border:2px solid var(--cyan);border-radius:50%;transition:transform .1s,border-color .1s;box-shadow:0 0 14px rgba(58,217,255,.5)}
-#handCursor .core{position:absolute;left:50%;top:50%;width:5px;height:5px;margin:-2.5px;background:#fff;border-radius:50%}
-#handCursor.pinch .ring{transform:scale(.5);border-color:var(--neon);box-shadow:0 0 20px var(--neon)}
+#handCursor .ring{position:absolute;inset:0;border:3px solid var(--cyan);border-radius:50%;
+  transition:transform .09s,border-color .09s,box-shadow .09s;
+  box-shadow:0 0 22px rgba(58,217,255,.65),inset 0 0 18px rgba(58,217,255,.28)}
+#handCursor .ring::before,#handCursor .ring::after{content:"";position:absolute;background:var(--cyan);opacity:.85}
+#handCursor .ring::before{left:50%;top:-13px;width:2px;height:9px;margin-left:-1px}
+#handCursor .ring::after{left:50%;bottom:-13px;width:2px;height:9px;margin-left:-1px}
+#handCursor .core{position:absolute;left:50%;top:50%;width:9px;height:9px;margin:-4.5px;background:#fff;
+  border-radius:50%;box-shadow:0 0 12px #fff}
+#handCursor .tip{position:absolute;left:50%;top:100%;transform:translateX(-50%);margin-top:9px;white-space:nowrap;
+  font-family:var(--thai);font-size:11px;color:var(--cyan);background:rgba(4,9,15,.85);
+  padding:3px 9px;border-radius:3px;border:1px solid var(--line)}
+#handCursor.pinch .ring{transform:scale(.46);border-color:var(--neon);
+  box-shadow:0 0 34px var(--neon),inset 0 0 20px rgba(38,255,156,.4)}
+#handCursor.pinch .tip{color:var(--neon);border-color:var(--neon-d)}
 
 /* ---------- OVERLAY / MENU ---------- */
 .ov{position:fixed;inset:0;z-index:70;display:none;align-items:center;justify-content:center;padding:18px;
@@ -246,8 +281,7 @@ input[type=text]:focus{outline:none;border-color:var(--cyan)}
 @media (max-width:900px){
   .stage{grid-template-columns:1fr;grid-template-rows:minmax(230px,38vh) minmax(0,1fr);padding:8px;gap:8px}
   .stats .chip:nth-child(n+5){display:none}
-  #cam{width:118px;bottom:auto;top:56px}
-  .brief p{display:none}
+  .brief{max-height:60%}
 }
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
@@ -277,7 +311,10 @@ input[type=text]:focus{outline:none;border-color:var(--cyan)}
       <div class="brief">
         <h2><u id="bTag">W1</u><span id="bTitle">—</span></h2>
         <p id="bStory">—</p>
+        <div class="glabel">ข้อกำหนดของระบบ · SYSTEM REQUIREMENTS</div>
         <ul class="goals" id="bGoals"></ul>
+        <div class="rulebox" id="bRule"></div>
+        <div class="meta" id="bMeta"></div>
       </div>
       <canvas id="sim"></canvas>
     </div>
@@ -296,7 +333,7 @@ input[type=text]:focus{outline:none;border-color:var(--cyan)}
         <button id="btnUndo" title="ยกเลิกบล็อกล่าสุดที่วาง">↶ ย้อนกลับ</button>
         <button id="btnReset">↺ RESET</button>
         <button class="btn-hint" id="btnHint">💡 HINT</button>
-        <button id="btnCam" title="สลับโหมดควบคุมด้วยมือ">✋</button>
+        <button id="btnCam" title="เปิดโหมดควบคุมด้วยมือ (ขออนุญาตใช้กล้อง)">✋ กล้อง</button>
         <button id="btnMute" title="เสียง">🔊</button>
       </div>
     </div>
@@ -304,14 +341,12 @@ input[type=text]:focus{outline:none;border-color:var(--cyan)}
 </div>
 
 <div id="ghost"></div>
-<div id="handCursor"><div class="ring"></div><div class="core"></div></div>
+<div id="handCursor"><div class="ring"></div><div class="core"></div><div class="tip" id="handTip">จีบนิ้วเพื่อคีบ</div></div>
 <div id="toast"></div>
 
-<div id="cam">
-  <video id="camVid" playsinline muted></video>
-  <canvas id="camCv" width="176" height="132"></canvas>
-  <div class="lab"><span id="camState">กำลังเชื่อมต่อ…</span><b id="camPinch"></b></div>
-</div>
+<div id="cam"><video id="camVid" playsinline muted></video></div>
+<canvas id="camCv"></canvas>
+<div id="camHud"><span id="camState">กำลังเชื่อมต่อ…</span><b id="camPinch"></b><button id="btnCamDim" title="ปรับความสว่างภาพกล้อง">◐</button></div>
 
 <!-- ===== MENU ===== -->
 <div class="ov on" id="ovMenu"><div class="card">
@@ -342,12 +377,27 @@ input[type=text]:focus{outline:none;border-color:var(--cyan)}
 
   <div class="keys">
     <div class="key"><b>ANTI-CHEAT</b><span>ทุกภารกิจถูกสร้างสดจากตัวสุ่ม ทั้งลำดับ ค่าตัวเลข เงื่อนไข และบล็อกลวง เล่นซ้ำก็ไม่ได้โจทย์เดิม</span></div>
-    <div class="key"><b>HAND TRACKING</b><span>กดปุ่ม ✋ เพื่อเปิดกล้อง จีบนิ้วโป้ง+นิ้วชี้เพื่อคีบบล็อก คลายนิ้วเพื่อวาง</span></div>
+    <div class="key"><b>HAND TRACKING</b><span>กดปุ่ม ✋ ในเกม แล้วกด “อนุญาตและเปิดกล้อง” เบราว์เซอร์จะถามสิทธิ์ ให้เลือกอนุญาต จากนั้นจีบนิ้วโป้ง+นิ้วชี้เพื่อคีบบล็อก</span></div>
     <div class="key"><b>MOUSE / TOUCH</b><span>ลากวางด้วยเมาส์หรือนิ้วได้ทันที หรือแตะบล็อกแล้วแตะช่องปลายทาง</span></div>
     <div class="key"><b>ยกเลิกได้ตลอด</b><span>↶ ย้อนบล็อกล่าสุด (Z) · ระหว่างรันปุ่ม RUN จะเปลี่ยนเป็นยกเลิกการรัน (Esc)</span></div>
   </div>
 
   <div class="row"><button class="big" id="btnStart">▶ เริ่มภารกิจ</button></div>
+</div></div>
+
+<!-- ===== CAMERA PERMISSION ===== -->
+<div class="ov" id="ovCam"><div class="card" style="width:min(520px,100%)">
+  <div class="title" style="font-size:26px">ขอ<span>อนุญาตใช้กล้อง</span></div>
+  <div class="sub">HAND TRACKING PERMISSION</div>
+  <p class="lead">โหมดควบคุมด้วยมือต้องใช้ภาพจากกล้องเว็บแคมเพื่อตรวจจับตำแหน่งนิ้ว
+    <b style="color:var(--neon)">ภาพทั้งหมดประมวลผลในเครื่องของคุณเท่านั้น ไม่มีการบันทึกหรือส่งออกไปที่ใด</b>
+    เมื่อกดปุ่มด้านล่าง เบราว์เซอร์จะแสดงกล่องถามสิทธิ์ ให้เลือก <b>“อนุญาต / Allow”</b></p>
+  <div class="checks" id="camChecks"></div>
+  <div class="rulebox" id="camMsg" style="margin-top:12px">กดปุ่มด้านล่างเพื่อขอสิทธิ์ใช้กล้อง</div>
+  <div class="row" style="flex-direction:column;gap:8px">
+    <button class="big" id="btnAllowCam">🎥 อนุญาตและเปิดกล้อง</button>
+    <button id="btnNoCam">↩ ไม่ใช้กล้อง เล่นด้วยเมาส์ต่อ</button>
+  </div>
 </div></div>
 
 <!-- ===== PAUSE / EXIT ===== -->
@@ -437,6 +487,133 @@ const SFX={
    2. MISSION CONTENT — procedural generators
    ================================================================== */
 function S(key,label,icon,kind,fx,data,opt){return{key,label,icon,kind,fx,data:data||{},opt:opt||null};}
+/* คำอธิบายสั้น ๆ ว่าบล็อกนั้น "ทำอะไร" — แสดงใต้ชื่อบล็อกทุกใบ (รวมบล็อกลวง) */
+const FXDESC={
+ sense_moist:'อ่านตัวเลขความชื้นจากเซนเซอร์ในดิน เก็บไว้ใช้เทียบเงื่อนไข',
+ sense_temp:'อ่านอุณหภูมิในโรงเรือน ณ ขณะนั้น',
+ sense_light:'อ่านความเข้มแสงจากเซนเซอร์ LDR',
+ sense_ec:'อ่านค่าความเข้มข้นสารอาหารในน้ำ',
+ sense_tank:'ตรวจของเหลวคงเหลือในถัง ป้องกันปั๊มดูดอากาศ',
+ cond:'เงื่อนไขจริง → ทำคำสั่งถัดไป · เงื่อนไขเท็จ → จบโปรแกรม',
+ valve_on:'สั่งวาล์วเปิด น้ำเริ่มไหลลงแปลงทันที',
+ valve_off:'สั่งวาล์วปิด หยุดจ่ายน้ำ',
+ valve_stuck:'เปิดวาล์วค้างไว้โดยไม่มีคำสั่งปิด',
+ pump_on:'สั่งปั๊มเดินเครื่อง เริ่มจ่ายปุ๋ยลงถัง',
+ pump_off:'สั่งปั๊มหยุดทำงาน',
+ wait:'หยุดรอตามเวลา อุปกรณ์ที่เปิดอยู่ยังทำงานต่อระหว่างนี้',
+ led_on:'เปิดหลอดไฟปลูกพืชเหนือแปลง',led_off:'ปิดหลอดไฟปลูกพืช',
+ fan_on:'เปิดพัดลมดูดอากาศร้อนออกจากโรงเรือน',
+ cloud:'ส่งค่าที่วัดได้ขึ้นเซิร์ฟเวอร์เพื่อเก็บสถิติ',
+ alert:'ส่งแจ้งเตือนไปยังแอปของผู้ดูแล',
+ log:'บันทึกเหตุการณ์ที่เกิดขึ้นลงระบบ',
+ harvest:'สั่งชุดเก็บเกี่ยวผลผลิตในแปลง',reboot:'รีสตาร์ทบอร์ดควบคุมทั้งระบบ',
+ roof:'สั่งปิดหลังคาโรงเรือน',spray:'พ่นสารกำจัดแมลงทั่วโรงเรือน',
+ scan:'ระบุพิกัดปลายทางลงระบบนำทางของโดรน',
+ battery:'ตรวจพลังงานคงเหลือก่อนออกบิน',
+ takeoff:'ไต่ระดับจากพื้นขึ้นสู่ความสูงที่กำหนด',
+ fly:'เคลื่อนที่ไปข้างหน้าตามเส้นทางที่วางไว้',
+ fly2:'บินต่อไปยังจุดหมายถัดไป',
+ detect:'ยิงเลเซอร์วัดระยะ หาสิ่งกีดขวางข้างหน้า',
+ avoid_up:'ไต่ระดับขึ้นเพื่อข้ามสิ่งกีดขวางที่อยู่ด้านล่าง',
+ avoid_down:'ลดระดับลงเพื่อลอดใต้สิ่งกีดขวางที่อยู่ด้านบน',
+ hover:'ลอยนิ่งอยู่กับที่ ให้กล้องและสัญญาณคงที่',
+ capture:'ถ่ายภาพความละเอียดสูงเก็บไว้',
+ descend:'ลดระดับลงใกล้พื้นเหนือจุดวางของ',
+ drop:'ปลดล็อกพัสดุลงสู่จุดวาง',
+ grab:'ใช้แขนกลคีบพัสดุขึ้นมาไว้กับตัวโดรน',
+ rtl:'บินกลับสู่ฐานปล่อยโดยอัตโนมัติ',
+ emergency_drop:'ปลดพัสดุทิ้งทันทีจากตำแหน่งปัจจุบัน',
+ motor_off:'ตัดกำลังมอเตอร์ใบพัดทั้งหมด',boost:'เร่งความเร็วขึ้นสูงสุด',
+ manual:'สลับไปโหมดบังคับด้วยมือคน',light_on:'เปิดไฟสัญญาณของตัวโดรน',
+ recv_cred:'รับข้อมูลที่ผู้ใช้กรอกเข้ามาในระบบ',
+ ratelimit:'จำกัดจำนวนครั้งที่ลองล็อกอินได้ต่อช่วงเวลา',
+ hash:'แปลงรหัสผ่านเป็นค่าที่ย้อนกลับไม่ได้ก่อนนำไปเทียบ',
+ db_check:'ค้นฐานข้อมูลว่ามีผู้ใช้นี้และค่าตรงกันหรือไม่',
+ otp_gen:'สุ่มรหัสใช้ครั้งเดียวขึ้นมาใหม่',
+ otp_send:'ส่งรหัสที่สร้างไว้ไปยังมือถือของผู้ใช้',
+ otp_verify:'เทียบรหัสที่ผู้ใช้กรอกกับรหัสที่ระบบออกให้',
+ grant:'เปิดสิทธิ์ให้เข้าใช้งานระบบได้จริง',
+ grant_now:'เปิดสิทธิ์เข้าใช้งานทันทีโดยไม่รอผลอื่น',
+ plaintext:'บันทึกรหัสผ่านลงฐานข้อมูลตามที่รับมา',
+ fw_off:'ปิดการทำงานของไฟร์วอลล์ชั่วคราว',
+ mail_pw:'ส่งรหัสผ่านไปยังอีเมลของผู้ใช้',
+ skip_otp:'ข้ามการยืนยันตัวตนขั้นที่สอง',
+ admin:'กำหนดสิทธิ์ระดับผู้ดูแลระบบให้ผู้ใช้',
+ wipe_log:'ลบบันทึกเหตุการณ์ทั้งหมดออกจากระบบ',
+ open_port:'เปิดพอร์ตสำหรับเข้าถึงเครื่องจากระยะไกล',
+ deny:'ปฏิเสธคำขอเข้าถึงระบบ',
+ detect_anom:'ระบบ IDS จับทราฟฟิกที่ผิดปกติไปจากค่าปกติ',
+ check_ip:'เทียบ IP กับบัญชีดำเพื่อให้คะแนนความเสี่ยง',
+ snapshot:'บันทึกสภาพระบบและทราฟฟิกไว้เป็นหลักฐาน',
+ block_ip:'ตัดการเชื่อมต่อจาก IP ต้นทางทั้งหมด',
+ isolate:'ถอดเครื่องที่ติดเชื้อออกจากเครือข่าย',
+ alert_soc:'แจ้งทีมเฝ้าระวังความปลอดภัยให้เข้ามาดู',
+ scan_mal:'สแกนหามัลแวร์ที่ตกค้างทั้งระบบ',
+ report:'สรุปเหตุการณ์ทั้งหมดเป็นรายงาน',
+ req_cert:'ขอใบรับรองตัวตนจากเซิร์ฟเวอร์ปลายทาง',
+ verify_cert:'ตรวจลายเซ็นดิจิทัลว่าใบรับรองของจริงหรือไม่',
+ keygen:'สร้างกุญแจเข้ารหัสสำหรับใช้ในรอบนี้',
+ encrypt:'แปลงข้อมูลเป็นรหัสลับด้วยกุญแจที่สร้างไว้',
+ transmit:'ส่งข้อมูลออกไปตามช่องทางที่เตรียมไว้',
+ checksum:'ตรวจว่าข้อมูลปลายทางตรงกับต้นทางทุกบิต',
+ ack:'รอปลายทางยืนยันว่าได้รับข้อมูลครบ',
+ close:'ปิดการเชื่อมต่อและล้างกุญแจทิ้ง',
+ prep:'ล้างมือและจัดวัตถุดิบให้พร้อมหยิบ',
+ measure:'ชั่งตวงส่วนผสมตามที่สูตรกำหนด',
+ heat_on:'จุดเตาให้ความร้อน ต้องมีคำสั่งปิดเสมอ',
+ heat_off:'ดับไฟเตา หยุดให้ความร้อน',
+ heat_max:'เปิดความร้อนไปที่ระดับสูงสุด',
+ oil:'เทน้ำมันลงกระทะเพื่อกันติดและกระจายความร้อน',
+ add:'ใส่วัตถุดิบลงกระทะตามลำดับของสูตร',
+ stir:'ผัดคลุกให้ความร้อนและเครื่องปรุงกระจายทั่ว',
+ season:'เติมเครื่องปรุงรสลงในอาหาร',
+ plate:'ตักอาหารจากกระทะลงจานเสิร์ฟ',
+ water:'เติมน้ำเปล่าลงในภาชนะที่ตั้งไฟอยู่',
+ ice:'ใส่น้ำแข็งลงในภาชนะ',sugar:'เติมน้ำตาลลงในส่วนผสม',
+ taste:'ชิมรสอาหารด้วยช้อน',wash_now:'ล้างภาชนะทันทีในขั้นนี้',
+ micro:'อุ่นด้วยไมโครเวฟตามเวลาที่ตั้ง',
+ mix:'ผสมยีสต์กับน้ำอุ่นเพื่อปลุกยีสต์ให้ทำงาน',
+ knead:'นวดโดว์ให้กลูเตนเรียงตัวจนเนื้อเนียน',
+ rest:'ปล่อยแป้งพักให้ยีสต์ทำงานจนขึ้นฟู',
+ oven_on:'อุ่นเตาอบล่วงหน้าให้ถึงอุณหภูมิที่ตั้งไว้',
+ bake:'อบด้วยความร้อนตามเวลาที่กำหนด',
+ check:'ตรวจสีและความสุกด้วยสายตาก่อนตัดสินใจ',
+ oven_off:'เปิดเตาแล้วนำถาดออกจากเตาอบ',
+ cool:'พักให้คลายความร้อนก่อนนำไปตัด',
+ open_oven:'เปิดฝาเตาอบขณะที่กำลังอบอยู่',
+ clean:'ล้างหัวชงและไล่น้ำเก่าออกจากระบบ',
+ clean2:'ล้างอุปกรณ์แล้วเก็บเข้าที่',
+ grind:'บดเมล็ดกาแฟให้ละเอียดลงในด้ามชง',
+ tamp:'อัดผงกาแฟให้แน่นเรียบเสมอกันทั้งหน้า',
+ lock:'ล็อกด้ามชงเข้ากับหัวชงของเครื่อง',
+ extract:'ปล่อยน้ำร้อนแรงดันสูงผ่านผงกาแฟ',
+ steam_milk:'พ่นไอน้ำเข้านมจนได้โฟมเนียน',
+ pour:'เทนมลงบนเอสเพรสโซเป็นลวดลาย',
+ serve:'ยกเสิร์ฟให้ลูกค้า',
+ map_scan:'โหลดแผนที่และเส้นทางลงระบบนำทาง',
+ engine:'สตาร์ทเครื่องยนต์ให้รถพร้อมออกตัว',
+ forward:'เดินหน้าตามทิศที่หัวรถหันอยู่ ทีละช่อง',
+ turn_left:'หมุนหัวรถไปทางซ้าย 90° — รถยังไม่เคลื่อนที่',
+ turn_right:'หมุนหัวรถไปทางขวา 90° — รถยังไม่เคลื่อนที่',
+ wait_light:'จอดรอจนสัญญาณไฟเปลี่ยนเป็นเขียว',
+ park:'จอดรถที่จุดหมาย จบภารกิจ',
+ reverse:'ถอยหลังจากตำแหน่งปัจจุบัน 1 ช่อง',
+ run_red:'ขับผ่านสี่แยกโดยไม่หยุดรอสัญญาณ',
+ speeding:'เพิ่มความเร็วเกินที่กฎหมายกำหนด',
+ uturn:'กลับรถ 180° กลางถนน',
+ park_side:'จอดชิดขอบทางระหว่างเส้นทาง',
+ hazard:'เปิดไฟฉุกเฉินแล้วขับต่อไป',
+ manual_drive:'สลับให้คนขับควบคุมรถแทนระบบ'
+};
+const KINDLAB={cond:'บล็อกเงื่อนไข',io:'บล็อกอ่านค่า / ตรวจสอบ',act:'บล็อกสั่งงาน'};
+const WORLD_RULE={
+ 1:'กฎของระบบ IoT: ต้องอ่านค่าเซนเซอร์ก่อนตรวจเงื่อนไขเสมอ และทุกอุปกรณ์ที่สั่ง "เปิด" ต้องมีคำสั่ง "ปิด" ก่อนจบโปรแกรม',
+ 2:'กฎการบิน: โดรนต้องบินขึ้นก่อนจึงเคลื่อนที่ได้ และต้องอยู่เหนือจุดวางแล้วเท่านั้นจึงปล่อยพัสดุได้',
+ 3:'กฎความปลอดภัย: ห้ามให้สิทธิ์ก่อนยืนยันตัวตนครบทุกชั้น และห้ามเก็บหรือส่งข้อมูลลับแบบไม่เข้ารหัส',
+ 4:'กฎในครัว: ต้องเตรียมอุปกรณ์ให้พร้อมก่อนใส่วัตถุดิบ และต้องดับความร้อนก่อนจัดเสิร์ฟทุกครั้ง',
+ 5:'กฎจราจร: ซ้าย-ขวาอิงจากทิศที่หัวรถหันอยู่ ไม่ใช่ทิศบนจอ · คำสั่งเลี้ยวไม่ทำให้รถเคลื่อนที่'
+};
+
 
 const WORLD_NAME={1:'IoT SMART FARM',2:'DELIVERY DRONE',3:'CYBER SECURITY',4:'ROBO KITCHEN',5:'ROUTE FINDER'};
 const DIFF=[
@@ -453,7 +630,14 @@ const GEN1=[
       cur=r.int(9,th-5);
   return{title:'ระบบรดน้ำอัตโนมัติ',
    story:`โรงเรือน${crop} 4 แปลง ใช้บอร์ด ESP32 ต่อกับเซนเซอร์ความชื้นในดินและวาล์วโซลินอยด์ ตอนนี้ดินแห้งจนใบเริ่มเหี่ยว`,
-   goals:[`อ่านค่าความชื้นจากเซนเซอร์ในดิน`,`ถ้าความชื้นต่ำกว่า ${th}% ให้เปิดวาล์วน้ำ`,`รดน้ำ ${sec} วินาที แล้วต้องปิดวาล์วทุกครั้ง`,`ปิดงานด้วยการส่งค่าขึ้นคลาวด์`],
+   goals:[`[g3]เริ่มจากตรวจสอบระดับน้ำในถังสำรองก่อน ถ้าถังแห้งแล้วสั่งเปิดวาล์วจะได้แค่ลม`,
+    `ต้องอ่านค่าจากเซนเซอร์ก่อนเสมอ ระบบจึงจะมีตัวเลขไปเทียบกับเงื่อนไขได้`,
+    `เงื่อนไขที่ใช้คือ ความชื้นในดิน < ${th}% เท่านั้น (ในคลังมีบล็อกเงื่อนไขค่าอื่นปนอยู่)`,
+    `เมื่อเงื่อนไขเป็นจริงจึงสั่งเปิดวาล์วน้ำ`,
+    `[g0]รดน้ำค้างไว้ ${sec} วินาที ก่อนจะสั่งปิดวาล์ว`,
+    `ห้ามจบโปรแกรมโดยที่วาล์วยังเปิดค้าง ไม่งั้นน้ำท่วมแปลง${crop}`,
+    `[g2]อ่านค่าความชื้นซ้ำเพื่อยืนยันว่ารดน้ำได้ผลจริง`,
+    `[g1]ปิดท้ายด้วยการส่งข้อมูลขึ้น Cloud`],
    sim:{moist:cur,temp:r.int(29,36),light:r.int(400,900),th},
    all:[
     S('f_tank','ตรวจสอบระดับน้ำในถังสำรอง','🛢','io','sense_tank',{},'g3'),
@@ -470,7 +654,11 @@ const GEN1=[
  r=>{ const lux=r.pick([120,150,180,200,240,280,320,350,420,500]),tp=r.pick([30,32,33,34,35,36,38,40]),hr=r.pick([2,3,4,5,6,8]);
   return{title:'ระบบไฟปลูกพืชและควบคุมอุณหภูมิ',
    story:`โรงเรือนปิดปลูกผักไฮโดรโปนิกส์ ต้องเสริมแสงเมื่อฟ้าครึ้ม และระบายความร้อนไม่ให้ผักช็อกแดด`,
-   goals:[`อ่านค่าความเข้มแสงจากเซนเซอร์ LDR`,`ถ้าแสงน้อยกว่า ${lux} lux ให้เปิดไฟ LED ปลูกพืช ${hr} ชั่วโมง`,`ปิดไฟ LED เมื่อครบเวลา`,`ถ้าอุณหภูมิสูงกว่า ${tp}°C ให้เปิดพัดลมระบายอากาศ`],
+   goals:[`อ่านค่าจากเซนเซอร์วัดแสง (LDR) ก่อน แล้วจึงนำค่าไปเทียบเงื่อนไข`,
+    `เงื่อนไขคือ ความเข้มแสง < ${lux} lux จึงจะเปิดไฟ LED ปลูกพืช`,
+    `เปิดไฟค้างไว้ ${hr} ชั่วโมง แล้วต้องสั่งปิดไฟ ห้ามเปิดค้างตลอดคืน ผักจะยืดจนล้ม`,
+    `[g1]เรื่องแสงเสร็จแล้วจึงมาดูความร้อน: อ่านอุณหภูมิ ถ้า > ${tp}°C จึงเปิดพัดลม`,
+    `[g2]ส่งข้อมูลขึ้น Cloud เป็นขั้นสุดท้าย`],
    sim:{moist:r.int(45,70),temp:tp+r.int(1,4),light:r.int(60,lux-30),th:0},
    all:[
     S('l_read','อ่านค่าความเข้มแสง (LDR)','📶','io','sense_light'),
@@ -488,7 +676,13 @@ const GEN1=[
  r=>{ const ec=r.pick([1.0,1.2,1.4,1.5,1.6,1.8,2.0,2.2,2.4]),sec=r.pick([10,15,20,25,30,45,60]);
   return{title:'ระบบผสมปุ๋ยอัตโนมัติ (Fertigation)',
    story:`ถังสารละลายธาตุอาหารเจือจางลงหลังเติมน้ำ ระบบต้องเติมปุ๋ย A/B แล้วกวนผสมให้ค่า EC กลับมาตามเกณฑ์`,
-   goals:[`อ่านค่า EC ของสารละลายในถัง`,`ถ้า EC ต่ำกว่า ${ec.toFixed(1)} mS/cm ให้เปิดปั๊มปุ๋ย`,`กวนผสม ${sec} วินาที แล้วปิดปั๊ม`,`อ่านค่าซ้ำเพื่อยืนยันก่อนบันทึก`],
+   goals:[`[g3]ตรวจปริมาณปุ๋ยคงเหลือในถังก่อน ปั๊มที่ดูดอากาศจะเสียหาย`,
+    `อ่านค่า EC ของสารละลายก่อน แล้วจึงนำไปเทียบเงื่อนไข`,
+    `เงื่อนไขคือ EC < ${ec.toFixed(1)} mS/cm จึงจะเปิดปั๊มปุ๋ย`,
+    `[g0]เปิดปั๊มแล้วต้องกวนผสม ${sec} วินาที ให้สารละลายเข้ากันก่อน`,
+    `ห้ามจบโปรแกรมโดยที่ปั๊มปุ๋ยยังทำงานอยู่ ปุ๋ยจะเข้มข้นจนรากไหม้`,
+    `[g2]อ่านค่า EC ซ้ำเพื่อยืนยันผลก่อนบันทึก`,
+    `[g1]ส่งข้อมูลขึ้น Cloud เป็นขั้นสุดท้าย`],
    sim:{moist:r.int(55,80),temp:r.int(27,32),light:r.int(300,700),th:0},
    all:[
     S('e_tank','ตรวจสอบปริมาณปุ๋ยคงเหลือ','🛢','io','sense_tank',{},'g3'),
@@ -524,7 +718,13 @@ const GEN2=[
  r=>{ const alt=r.pick([6,8,10,12,15,18,20,25,30]),dist=r.pick([120,180,240,300,350,420,480,600,750]),o=obsPick(r),bat=r.pick([15,20,25,30,35]);
   return{title:'ภารกิจส่งพัสดุด่วน',
    story:`โดรนขนส่งต้องนำพัสดุการแพทย์ไปส่งที่ลานจอดปลายทาง ระหว่างทางมี${o.label}`,
-   goals:[`บินขึ้นที่ระดับ ${alt} เมตร แล้วบินไปข้างหน้า ${dist} เมตร`,`สิ่งกีดขวาง: ${o.label} → เลือกทิศหลบให้ถูก`,`ลดระดับลงจุดวางแล้วปล่อยพัสดุ`,`แบตเตอรี่ต้องเหลือมากกว่า ${bat}% ก่อนออกบิน`],
+   goals:[`[g1]สแกนพิกัดปลายทางก่อน โดรนจึงจะรู้ว่าต้องบินไป ${dist} เมตร`,
+    `[g2]ตรวจแบตเตอรี่ให้เหลือมากกว่า ${bat}% ก่อนออกบิน`,
+    `ต้องบินขึ้นให้ถึง ${alt} เมตรก่อน จึงจะเคลื่อนที่ไปข้างหน้าได้ ไม่งั้นชนของบนพื้น`,
+    `[g3]ใช้ LiDAR ตรวจจับสิ่งกีดขวางก่อนตัดสินใจหลบ`,
+    `สิ่งกีดขวางคือ${o.label} → ในคลังมีทั้งบล็อกไต่ขึ้นและลอดใต้ ต้องเลือกให้ตรงกับภาพจำลอง`,
+    `[g0]ต้องลดระดับลงจุดวางก่อน จึงจะปล่อยพัสดุได้ ปล่อยจากที่สูง = ของแตก`,
+    `[g4]ส่งของเสร็จแล้วบินกลับฐาน`],
    sim:{obs:o.type,alt,dist,battery:r.int(bat+25,96)},
    all:[
     S('d_scan',`สแกนพิกัดปลายทาง (${dist} ม.)`,'🛰','io','scan',{dist},'g1'),
@@ -542,7 +742,13 @@ const GEN2=[
  r=>{ const alt=r.pick([10,14,18,22]),o=obsPick(r),wh=r.pick(['คลัง A-7','ศูนย์กระจายสินค้าเหนือ','โกดัง B-2']);
   return{title:'ภารกิจรับ-ส่งสองจุด',
    story:`โดรนต้องบินไป${wh}เพื่อคีบพัสดุก่อน แล้วจึงบินต่อไปส่งลูกค้า ระหว่างเส้นทางมี${o.label}`,
-   goals:[`บินขึ้น ${alt} เมตร แล้วบินไปยัง${wh}`,`คีบพัสดุขึ้นโดรนก่อนออกเดินทางต่อ`,`หลบสิ่งกีดขวางให้ถูกทิศ: ${o.label}`,`ปล่อยพัสดุที่จุดหมายปลายทาง`],
+   goals:[`ภารกิจนี้มี 2 ช่วง: ไปรับของที่${wh} แล้วจึงนำไปส่งลูกค้า`,
+    `[g0]สแกนพิกัดคลังสินค้าก่อนออกเดินทาง`,
+    `[g1]ตรวจแบตเตอรี่ให้พอสำหรับทั้งสองช่วงก่อนบินขึ้น`,
+    `บินขึ้น ${alt} เมตรก่อน แล้วจึงบินไปยัง${wh} เพื่อคีบพัสดุ`,
+    `ต้องมีพัสดุอยู่บนโดรนแล้วเท่านั้น จึงจะบินต่อไปหาลูกค้าได้`,
+    `ระหว่างทางมี${o.label} ต้องเลือกทิศหลบให้ตรงกับภาพจำลอง`,
+    `[g3]ลดระดับลงจุดวางก่อนปล่อยพัสดุทุกครั้ง`],
    sim:{obs:o.type,alt,dist:400,battery:r.int(60,98)},
    all:[
     S('p_scan','สแกนพิกัดคลังสินค้า','🛰','io','scan',{},'g0'),
@@ -561,7 +767,13 @@ const GEN2=[
  r=>{ const alt=r.pick([25,30,40,50]),o=obsPick(r),tg=r.pick(['เสาส่งสัญญาณ','แผงโซลาร์ฟาร์ม','สะพานข้ามแม่น้ำ']);
   return{title:'ภารกิจบินสำรวจโครงสร้าง',
    story:`ทีมวิศวกรต้องการภาพถ่ายความละเอียดสูงของ${tg} โดรนต้องบินสำรวจแล้วกลับฐานอย่างปลอดภัย`,
-   goals:[`บินขึ้น ${alt} เมตร แล้วบินไปยัง${tg}`,`ลอยนิ่ง (hover) เพื่อสแกนโครงสร้าง`,`ถ่ายภาพเก็บข้อมูล`,`บินกลับฐานทุกครั้งเมื่อจบภารกิจ`],
+   goals:[`เป้าหมายคือได้ภาพ${tg}ที่คมชัด แล้วนำโดรนกลับฐานอย่างปลอดภัย`,
+    `[g0]สแกนพิกัดเป้าหมายก่อนออกบิน`,
+    `[g1]ตรวจแบตเตอรี่ก่อนบินขึ้น`,
+    `บินขึ้น ${alt} เมตร แล้วจึงบินไปยัง${tg}`,
+    `[g3]ระหว่างทางมี${o.label} ต้องเลือกทิศหลบให้ถูก`,
+    `ต้องลอยนิ่ง (hover) ให้สัญญาณคงที่ก่อน จึงจะถ่ายภาพได้ ถ่ายตอนบินอยู่ภาพจะเบลอ`,
+    `จบภารกิจต้องบินกลับฐานเสมอ ห้ามทิ้งโดรนไว้กลางทาง`],
    sim:{obs:o.type,alt,dist:500,battery:r.int(55,95)},
    all:[
     S('s_scan',`สแกนพิกัด${tg}`,'🛰','io','scan',{},'g0'),
@@ -590,7 +802,15 @@ const GEN3=[
  r=>{ const dg=r.pick([4,5,6,8]),exp=r.pick([30,45,60,90,120,180]),tries=r.pick([3,4,5,6]);
   return{title:'ระบบล็อกอินสองชั้น (2FA)',
    story:`ระบบธนาคารออนไลน์ถูกโจมตีแบบเดารหัสผ่าน ทีมความปลอดภัยสั่งให้เพิ่มการยืนยันตัวตนสองชั้นทันที`,
-   goals:[`รับ Username/Password แล้วห้ามเก็บเป็นข้อความธรรมดา`,`ตรวจสอบกับฐานข้อมูล ก่อนออก OTP ${dg} หลัก`,`ยืนยัน OTP ที่หมดอายุใน ${exp} วินาที`,`อนุมัติเข้าระบบเป็นขั้นตอนสุดท้ายเท่านั้น`],
+   goals:[`ผู้ใช้จะเข้าระบบได้ก็ต่อเมื่อผ่านการยืนยันครบทั้ง 2 ชั้นเท่านั้น`,
+    `[g3]กันการเดารหัสด้วยการจำกัดจำนวนครั้งที่ล็อกอิน (${tries} ครั้ง) ตั้งแต่ต้น`,
+    `รับ Username/Password เข้ามาก่อนเป็นขั้นแรก`,
+    `[g0]ห้ามนำรหัสผ่านดิบไปใช้ต่อ ต้อง Hash + Salt ก่อนเสมอ`,
+    `นำค่าที่ได้ไปตรวจสอบกับฐานข้อมูลผู้ใช้`,
+    `[g1]ตรวจเงื่อนไขว่ารหัสผ่านถูกต้องหรือไม่ ถ้าไม่ถูกต้องให้จบการทำงาน`,
+    `[g2]สร้างรหัส OTP ${dg} หลักก่อน จึงจะมีรหัสให้ส่ง`,
+    `ส่ง OTP ไปมือถือ แล้วต้องรอตรวจสอบ OTP (อายุ ${exp} วินาที) ให้ผ่านก่อน`,
+    `อนุมัติเข้าสู่ระบบเป็นขั้นสุดท้ายเท่านั้น — อนุมัติก่อนตรวจเสร็จ = เปิดประตูให้แฮกเกอร์`],
    sim:{dg,exp},
    all:[
     S('c_recv','รับ Username / Password','⌨','io','recv_cred'),
@@ -608,7 +828,13 @@ const GEN3=[
  r=>{ const sc=r.pick([60,65,70,75,80,85,90,95]),ip=`${r.int(101,223)}.${r.int(0,255)}.${r.int(0,255)}.${r.int(2,254)}`;
   return{title:'ตอบสนองการบุกรุกระบบ',
    story:`IDS แจ้งเตือนพฤติกรรมผิดปกติจาก IP ${ip} มีการยิงคำขอเข้าเซิร์ฟเวอร์ถี่ผิดปกติกลางดึก`,
-   goals:[`ตรวจจับพฤติกรรมผิดปกติจากทราฟฟิก`,`ตรวจสอบ IP กับบัญชีดำ และให้คะแนนความเสี่ยง`,`ถ้าคะแนนเสี่ยงเกิน ${sc} ให้บล็อก IP ทันที`,`แจ้งทีม SOC และเก็บหลักฐานทุกครั้ง`],
+   goals:[`เป้าหมายคือหยุดการบุกรุกจาก ${ip} และเก็บหลักฐานให้ครบถ้วน`,
+    `ต้องให้ IDS ตรวจจับพฤติกรรมผิดปกติก่อน ระบบจึงจะรู้ว่าควรสืบต่อที่ IP ใด`,
+    `นำ IP ไปตรวจกับบัญชีดำ เพื่อให้ได้คะแนนความเสี่ยงมาใช้ตัดสินใจ`,
+    `[g0]เงื่อนไขสั่งบล็อกคือ คะแนนความเสี่ยง > ${sc}`,
+    `[g1]เก็บ Snapshot หลักฐานก่อนบล็อก เพราะบล็อกแล้วข้อมูลการโจมตีจะขาดตอน`,
+    `[g2]แยกเครื่องที่ติดเชื้อออกจากเครือข่ายเพื่อกันการลุกลาม`,
+    `บล็อก IP แล้วต้องแจ้งทีม SOC และบันทึก Log ไว้เสมอ`],
    sim:{ip,sc},
    all:[
     S('i_det','ตรวจจับพฤติกรรมผิดปกติ (IDS)','🚨','io','detect_anom'),
@@ -626,7 +852,13 @@ const GEN3=[
  r=>{ const bit=r.pick([128,192,256]),alg=r.pick(['AES','ChaCha20']);
   return{title:'สร้างช่องทางสื่อสารเข้ารหัส',
    story:`แอปพลิเคชันต้องส่งข้อมูลผู้ป่วยข้ามเครือข่ายสาธารณะ จึงต้องตั้งช่องทางเข้ารหัสก่อนส่งทุกครั้ง`,
-   goals:[`ขอใบรับรองจากเซิร์ฟเวอร์และตรวจสอบลายเซ็นดิจิทัล`,`สร้าง Session Key ${alg}-${bit} bit`,`เข้ารหัสข้อมูลก่อนส่งเสมอ`,`ตรวจสอบ Checksum ปลายทางก่อนปิดการเชื่อมต่อ`],
+   goals:[`ห้ามส่งข้อมูลผู้ป่วยออกจากระบบโดยไม่เข้ารหัสเด็ดขาด`,
+    `ขอใบรับรองจากเซิร์ฟเวอร์ก่อน แล้วต้องตรวจลายเซ็นดิจิทัลก่อนจะเชื่อถือ`,
+    `[g0]ตรวจเงื่อนไขว่าใบรับรองยังไม่หมดอายุ ถ้าหมดอายุให้หยุด`,
+    `สร้าง Session Key ${alg}-${bit} bit ก่อน จึงจะมีกุญแจไปเข้ารหัสข้อมูลได้`,
+    `เข้ารหัสข้อมูลเสร็จแล้วจึงส่งออกผ่านช่องทางที่ปลอดภัย`,
+    `[g1]ตรวจ Checksum ปลายทางเพื่อยืนยันว่าข้อมูลไม่ถูกแก้ระหว่างทาง`,
+    `[g3]ปิดการเชื่อมต่อและล้าง Key ทิ้งเมื่อจบงาน`],
    sim:{bit,alg},
    all:[
     S('k_req','ขอใบรับรองจากเซิร์ฟเวอร์','📜','io','req_cert'),
@@ -658,7 +890,14 @@ const GEN4=[
       chili=r.pick([3,5,7,10]);
   return{title:'หุ่นยนต์เชฟ: ผัดกะเพรา',
    story:`ครัวกลางอัตโนมัติรับออร์เดอร์ผัดกะเพรา${meat} หุ่นยนต์ต้องทำตามลำดับให้ถูก ไม่งั้นไฟลุกท่วมกระทะ`,
-   goals:[`เปิดเตาไฟ${lvl} แล้วค่อยใส่น้ำมัน (ห้ามสลับลำดับ)`,`ผัดกระเทียมกับพริก ${chili} เม็ดให้หอมก่อน`,`ใส่${meat} ผัด ${min} นาที แล้วปรุงรส`,`ใส่ใบกะเพราเป็นอย่างสุดท้ายก่อนปิดเตา`],
+   goals:[`เป้าหมายคือผัดกะเพรา${meat}ให้สุกหอม โดยไม่ทำครัวไหม้`,
+    `[g2]เตรียมวัตถุดิบและล้างมือให้เรียบร้อยก่อนเริ่มลงมือ`,
+    `ต้องเปิดเตาไฟ${lvl}ก่อน แล้วจึงใส่น้ำมัน — เทน้ำมันลงกระทะเย็นอาหารจะอมน้ำมันจนเละ`,
+    `ผัดกระเทียมกับพริก ${chili} เม็ดให้หอมก่อน แล้วจึงใส่${meat}ผัด ${min} นาที`,
+    `[g0]ปรุงรสหลังจากเนื้อสุกแล้วเท่านั้น`,
+    `[g1]ผัดคลุกให้เครื่องปรุงเข้ากันทั่วกระทะ`,
+    `ใบกะเพราใส่เป็นอย่างสุดท้ายก่อนปิดเตา ใส่เร็วเกินไปใบจะดำไหม้`,
+    `[g3]ปิดเตาให้เรียบร้อยก่อน จึงตักใส่จานเสิร์ฟ`],
    sim:{mode:'pan'},
    all:[
     S('k_prep','เตรียมวัตถุดิบและล้างมือ','🧼','act','prep',{},'g2'),
@@ -677,7 +916,14 @@ const GEN4=[
       rs=r.pick([30,45,60,90,120]),tp=r.pick([160,170,180,190,200,220]),bk=r.pick([15,18,20,25,30,35]);
   return{title:'เบเกอรี่อัตโนมัติ: อบขนมปัง',
    story:`สายพานเบเกอรี่ต้องอบขนมปังล็อตเช้า ถ้าลำดับผิดแป้งจะไม่ขึ้นฟูหรือไหม้เป็นถ่าน`,
-   goals:[`ตวงแป้ง ${gm} กรัม แล้วผสมยีสต์กับน้ำอุ่น`,`นวดโดว์ ${kn} นาที และพักให้ขึ้นฟู ${rs} นาที`,`อุ่นเตาอบให้ถึง ${tp}°C ก่อนนำเข้าอบเสมอ`,`อบ ${bk} นาที แล้วนำออกพักให้เย็น`],
+   goals:[`เป้าหมายคือขนมปังที่ขึ้นฟูและสุกทั่วถึงทั้งก้อน`,
+    `ตวงแป้ง ${gm} กรัมก่อน แล้วผสมยีสต์กับน้ำอุ่นเพื่อปลุกยีสต์ให้ทำงาน`,
+    `นวดโดว์ ${kn} นาทีให้เนื้อแป้งเนียน`,
+    `[g0]พักแป้งให้ขึ้นฟู ${rs} นาที ข้ามขั้นนี้ขนมจะแน่นเป็นก้อนหิน`,
+    `ต้องอุ่นเตาอบให้ถึง ${tp}°C ก่อนนำเข้าอบเสมอ ไม่งั้นขนมจะดิบกลางใน`,
+    `อบ ${bk} นาที และห้ามเปิดฝาเตาระหว่างอบ ขนมจะยุบแฟบ`,
+    `[g1]ตรวจสีและความสุกก่อนตัดสินใจนำออก`,
+    `[g2]นำออกจากเตาแล้วต้องพักให้เย็นก่อนตัด`],
    sim:{mode:'oven'},
    all:[
     S('b_meas',`ตวงแป้ง ${gm} กรัม`,'⚖','io','measure'),
@@ -695,7 +941,14 @@ const GEN4=[
  r=>{ const gr=r.pick([15,16,18,20,21,22]),sc=r.pick([22,25,27,30,32]),tp=r.pick([55,60,65,70]);
   return{title:'บาริสต้าหุ่นยนต์: ลาเต้',
    story:`เครื่องชงอัตโนมัติรับออร์เดอร์ลาเต้ร้อน ต้องอัดผงก่อนล็อกด้ามชงเสมอ ไม่งั้นน้ำจะทะลุเป็นรู`,
-   goals:[`บดเมล็ดกาแฟ ${gr} กรัม ลงด้ามชง`,`อัดผงให้แน่นเรียบก่อนล็อกด้ามชงเข้าเครื่อง`,`สกัดเอสเพรสโซ ${sc} วินาที`,`สตีมนมที่ ${tp}°C แล้วเทลาเต้อาร์ตก่อนเสิร์ฟ`],
+   goals:[`เป้าหมายคือลาเต้ร้อนหนึ่งแก้วที่ได้มาตรฐานร้าน`,
+    `[g0]ล้างหัวชงและไล่น้ำก่อนเริ่มทุกครั้ง เพื่อล้างกากเก่าและปรับอุณหภูมิ`,
+    `บดเมล็ดกาแฟ ${gr} กรัมลงด้ามชงก่อน`,
+    `อัดผงให้แน่นเรียบ แล้วจึงล็อกด้ามชงเข้าเครื่อง — ลำดับนี้ห้ามสลับ ถ้าล็อกก่อนอัด น้ำร้อนจะทะลุผงเป็นรู กาแฟจืดทันที`,
+    `สกัดเอสเพรสโซ ${sc} วินาที`,
+    `[g1]สตีมนมที่ ${tp}°C ให้ได้โฟมเนียน`,
+    `[g2]เทนมทำลาเต้อาร์ตลงบนเอสเพรสโซ`,
+    `เสิร์ฟลูกค้าเมื่อทุกอย่างพร้อมแล้ว`],
    sim:{mode:'coffee'},
    all:[
     S('a_clean','ล้างหัวชงและไล่น้ำ','🚿','act','clean',{},'g0'),
@@ -761,7 +1014,12 @@ const GEN5=[
     if(!inPath.has(ox+','+oy)&&!obst.some(o=>o[0]===ox&&o[1]===oy))obst.push([ox,oy,r.int(0,2)]);}
   return{title:`นำรถส่งของถึง${dest}`,
    story:`รถขนส่งอัตโนมัติต้องวิ่งจากจุดสตาร์ทไป${dest} เรียงคำสั่งเลี้ยวและระยะให้ตรงกับถนนบนแผนที่ ถ้าพลาดคือชนตึก`,
-   goals:[`ดูเส้นถนนสีเขียวบนแผนที่ แล้วเรียงคำสั่งตามเส้นทางนั้น`,`นับจำนวนช่องให้ตรงก่อนเลี้ยวทุกครั้ง`,`เลี้ยวซ้าย/ขวา อิงจากทิศที่หัวรถหันอยู่ ไม่ใช่ทิศบนจอ`,`ไปให้ถึง${dest}โดยไม่ชนสิ่งกีดขวาง`],
+   goals:(()=>{const gg=[`เป้าหมาย: นำรถจากช่อง START ไปถึงธง 🏁 ที่${dest} โดยไม่ชนอะไรเลย`,
+    `เส้นถนนสีเขียวบนแผนที่คือเส้นทางที่ถูกต้อง ให้ไล่ดูแล้วนับจำนวนช่องของแต่ละช่วง`,
+    `"เลี้ยวซ้าย/ขวา" อิงจากทิศที่หัวรถหันอยู่ ไม่ใช่ทิศบนจอ — พอเลี้ยวขึ้นด้านบนแล้ว ซ้ายขวาจะกลับด้านทันที`,
+    `คำสั่งเลี้ยวจะหมุนหัวรถอย่างเดียว รถยังไม่ขยับ ต้องตามด้วยคำสั่ง "ขับตรงไป" เสมอ`];
+    if(di>=1)gg.push(`สตาร์ทเครื่องยนต์ก่อนออกรถ และต้องหยุดรอไฟแดงตรงแยกก่อนไปต่อ`);
+    gg.push(`ขั้นสุดท้ายต้องจอดที่${dest} ห้ามจอดกลางทาง`);return gg;})(),
    sim:{cells,cols,rows,obst,dest,startY,lightIdx:lightAt>=0?1:-1},
    all};
  }
@@ -798,7 +1056,7 @@ function buildMission(world,diffIdx,seed){
       const v=Math.max(1,Math.round((n+off)*(n%1?10:1))/(n%1?10:1));return String(v===n?n+2:v);
     });
     if(lab!==s.label&&!solution.some(q=>q.label===lab)&&!decoys.some(q=>q.label===lab))
-      decoys.push(S('dp'+i,lab,s.icon,s.kind,'trap_param',{}));
+      decoys.push(S('dp'+i,lab,s.icon,s.kind,'trap_param',{d:FXDESC[s.fx]||''}));
   });
   // 2) ทิศหลบตรงข้าม (โลก 2)
   if(world===2&&tpl.obs){
@@ -811,10 +1069,12 @@ function buildMission(world,diffIdx,seed){
 
   const blocks=r.shuffle(solution.concat(decoys));
   const map={};blocks.forEach(b=>map[b.key]=b);
+  const goals=(tpl.goals||[]).filter(g=>{const m=/^\[(g\d)\]/.exec(g);return !m||inc.has(m[1]);})
+                              .map(g=>g.replace(/^\[g\d\]\s*/,''));
   return{
     world,diff:diffIdx,seed,
     id:`CF-${world}${b36(seed,4)}-${b36(hashStr(tpl.title+len),3)}`,
-    title:tpl.title,story:tpl.story,goals:tpl.goals,sim:tpl.sim||{},
+    title:tpl.title,story:tpl.story,goals,rule:WORLD_RULE[world],sim:tpl.sim||{},
     solution,blocks,map,timeLimit:d.time+Math.max(0,solution.length-d.len)*14,hints:d.hints
   };
 }
@@ -1445,7 +1705,7 @@ const Sim={
    ================================================================== */
 const G={
   world:0,diffSel:4,diff:1,seedBase:0,mIdx:0,
-  mission:null,slots:[],locked:0,running:false,abort:false,history:[],paused:false,
+  mission:null,slots:[],locked:0,running:false,abort:false,history:[],paused:false,stepTimer:null,
   score:0,combo:0,integrity:100,timeLeft:0,timer:null,
   hintsLeft:0,errThisMission:0,hintUsed:false,cleared:0,totalSteps:0,totalErr:0,
   started:false
@@ -1459,7 +1719,8 @@ function pop(txt,x,y,col){const e=document.createElement('div');e.className='pop
 function makeBlockEl(b){
   const e=document.createElement('div');
   e.className='block';e.dataset.key=b.key;e.dataset.kind=b.kind;
-  e.innerHTML=`<span class="ic">${b.icon}</span><span class="tx">${b.label}<small>${b.kind==='cond'?'CONDITION':b.kind==='io'?'INPUT / SENSOR':'ACTION'}</small></span>`;
+  const d=b.data.d||FXDESC[b.fx]||KINDLAB[b.kind]||'';
+  e.innerHTML=`<span class="ic">${b.icon}</span><span class="tx">${b.label}<small>${d}</small></span>`;
   return e;
 }
 
@@ -1468,7 +1729,12 @@ function renderMission(){
   $('#bTag').textContent='W'+m.world;
   $('#bTitle').textContent=m.title;
   $('#bStory').textContent=m.story;
-  $('#bGoals').innerHTML=m.goals.map((g,i)=>`<li><b>0${i+1}</b><span>${g}</span></li>`).join('');
+  $('#bGoals').innerHTML=m.goals.map((g,i)=>`<li><b>${String(i+1).padStart(2,'0')}</b><span>${g}</span></li>`).join('');
+  $('#bRule').textContent=m.rule||'';
+  const nDec=m.blocks.length-m.solution.length;
+  $('#bMeta').innerHTML=`<span>อัลกอริทึม ${m.solution.length} ขั้น</span>`+
+    `<span class="hot">คลัง ${m.blocks.length} บล็อก · มีบล็อกลวง ${nDec} ใบ</span>`+
+    `<span>ระดับ ${DIFF[m.diff].name}</span>`;
   $('#hMid').textContent=m.id;
   $('#hWorld').textContent=WORLD_NAME[m.world];
   $('#hDiff').textContent=DIFF[m.diff].tag;
@@ -1509,6 +1775,8 @@ function nextDifficulty(){
   return clamp(Math.floor(G.cleared/2),0,3); // ADAPTIVE
 }
 function newMission(){
+  if(G.stepTimer){clearTimeout(G.stepTimer);G.stepTimer=null;}
+  G.running=false;G.abort=false;
   G.mIdx++;
   G.diff=nextDifficulty();
   const world=G.world===0?(new RNG(G.seedBase+G.mIdx*7919)).int(1,5):G.world;
@@ -1542,24 +1810,40 @@ function timeUp(){
 }
 
 /* ---------- run engine ---------- */
-async function runProgram(){
+/* เครื่องรันโปรแกรมแบบขั้นต่อขั้น
+   ใช้ setTimeout ต่อกันเป็นทอด ๆ แทนลูปที่มี await ค้างอยู่ข้างใน
+   เพราะลูปที่ค้างนานเกิน 400ms จะถูกตัวเฝ้าระวังของเบราว์เซอร์บางตัวมองว่าเป็น infinite loop */
+function runProgram(){
   if(G.running||!G.mission)return;
   if(G.slots.some(s=>!s)){toast('เติมบล็อกให้ครบทุกช่องก่อนกด RUN');SFX.err();return;}
   G.running=true;G.abort=false;setCtl(false);SFX.run();$('#simTag').textContent='EXECUTING';
   Sim.recover();
+  execStep(G.locked);
+}
+function stopRun(tag){
+  if(G.stepTimer){clearTimeout(G.stepTimer);G.stepTimer=null;}
+  G.running=false;G.abort=false;setCtl(true);
+  if(tag)$('#simTag').textContent=tag;
+}
+function execStep(i){
+  if(!G.running||!G.mission)return;
   const sol=G.mission.solution;
-  for(let i=G.locked;i<sol.length;i++){
-    const slot=document.querySelector(`.slot[data-i="${i}"]`);
-    slot.classList.add('exec');
-    slot.scrollIntoView({block:'nearest',behavior:'smooth'});
-    await sleep(380);
-    if(G.abort){slot.classList.remove('exec');G.running=false;G.abort=false;setCtl(true);
-      $('#simTag').textContent='CANCELLED';SFX.click();
-      toast('ยกเลิกการรันแล้ว — ขั้นที่ล็อกไว้ยังอยู่ครบ กด RUN เมื่อพร้อม');return;}
-    const key=G.slots[i],blk=G.mission.map[key];
+  if(i>=sol.length){stopRun();missionClear();return;}
+  const slot=document.querySelector(`.slot[data-i="${i}"]`);
+  if(!slot){stopRun();return;}
+  slot.classList.add('exec');
+  try{slot.scrollIntoView({block:'nearest',behavior:'smooth'});}catch(e){}
+  G.stepTimer=setTimeout(()=>{
+    G.stepTimer=null;
+    if(!G.running)return;
+    if(G.abort){
+      slot.classList.remove('exec');stopRun('CANCELLED');SFX.click();
+      toast('ยกเลิกการรันแล้ว — ขั้นที่ล็อกไว้ยังอยู่ครบ กด RUN เมื่อพร้อม');return;
+    }
+    const key=G.slots[i],blk=key?G.mission.map[key]:null;
     if(blk&&blk.label===sol[i].label){
       slot.classList.remove('exec');slot.classList.add('ok');
-      blockEls.get(key).classList.add('locked');
+      const el=blockEls.get(key);if(el)el.classList.add('locked');
       Sim.good(blk.fx,blk.data);SFX.chime(i);
       G.combo++;G.totalSteps++;
       const mult=(1+Math.min(G.combo,12)*.15)*DIFF[G.mission.diff].mult;
@@ -1567,28 +1851,26 @@ async function runProgram(){
       G.score+=gain;
       const r=slot.getBoundingClientRect();pop('+'+gain,r.right-46,r.top+8);
       G.locked=i+1;updateHUD();
-      await sleep(blk.fx==='wait'?1050:720);
+      G.stepTimer=setTimeout(()=>{G.stepTimer=null;execStep(i+1);},blk.fx==='wait'?1050:720);
     }else{
       slot.classList.remove('exec');slot.classList.add('bad');
-      const el=blockEls.get(key);el.classList.add('wrong');
-      Sim.bad(blk.fx);SFX.err();
+      const el=key?blockEls.get(key):null;if(el)el.classList.add('wrong');
+      Sim.bad(blk?blk.fx:'');SFX.err();
       G.combo=0;G.errThisMission++;G.totalErr++;
       G.integrity-=[9,11,13,16][G.mission.diff];
       updateHUD();
-      await sleep(1500);
-      // partial reset : เด้งเฉพาะบล็อกที่ผิดกลับคลัง
-      el.classList.remove('wrong');
-      $('#palette').appendChild(el);
-      G.slots[i]=null;slot.classList.remove('bad');
-      updateFlowTag();
-      G.running=false;setCtl(true);$('#simTag').textContent='ERROR';
-      if(G.integrity<=0){gameOver();return;}
-      toast('ขั้นที่ '+(i+1)+' ผิด — บล็อกถูกส่งกลับคลัง แก้เฉพาะจุดนี้แล้วกด RUN ต่อได้เลย');
-      setTimeout(()=>Sim.recover(),900);
-      return;
+      G.stepTimer=setTimeout(()=>{
+        G.stepTimer=null;
+        // partial reset : เด้งเฉพาะบล็อกที่ผิดกลับคลัง
+        if(el){el.classList.remove('wrong');$('#palette').appendChild(el);}
+        G.slots[i]=null;slot.classList.remove('bad');
+        updateFlowTag();stopRun('ERROR');
+        if(G.integrity<=0){gameOver();return;}
+        toast('ขั้นที่ '+(i+1)+' ผิด — บล็อกถูกส่งกลับคลัง แก้เฉพาะจุดนี้แล้วกด RUN ต่อได้เลย');
+        setTimeout(()=>Sim.recover(),900);
+      },1500);
     }
-  }
-  missionClear();
+  },380);
 }
 function setCtl(on){
   const run=$('#btnRun');
@@ -1673,6 +1955,7 @@ function resumeGame(){
 function backToMenu(){
   G.paused=false;G.started=false;G.running=false;G.abort=false;
   clearInterval(G.timer);
+  if(G.stepTimer){clearTimeout(G.stepTimer);G.stepTimer=null;}
   $('#ovPause').classList.remove('on');$('#ovClear').classList.remove('on');$('#ovOver').classList.remove('on');
   $('#ovMenu').classList.add('on');
   $('#hTime').textContent='—';$('#simTag').textContent='STANDBY';
@@ -1782,53 +2065,141 @@ addEventListener('touchend',e=>{const t=e.changedTouches[0];onUp(t.clientX,t.cli
 /* ==================================================================
    6. HAND TRACKING (MediaPipe Hands, graceful fallback)
    ================================================================== */
+let camDim=2;const CAMOPS=[.1,.15,.22,.34,.5];
+function camLayers(on){
+  ['#cam','#camCv','#camHud'].forEach(s=>$(s).classList.toggle('on',on));
+  $('#handCursor').classList.toggle('on',on);
+  if(on)fitCamCanvas();
+}
+function fitCamCanvas(){
+  const c=$('#camCv'),dpr=Math.min(devicePixelRatio||1,2);
+  c.width=innerWidth*dpr;c.height=innerHeight*dpr;
+  c.style.width=innerWidth+'px';c.style.height=innerHeight+'px';
+  const x=c.getContext('2d');x.setTransform(dpr,0,0,dpr,0,0);
+}
+addEventListener('resize',()=>{if(Hand.on)fitCamCanvas();});
+function camMsg(t,bad){const e=$('#camMsg');e.innerHTML=t;
+  e.style.borderLeftColor=bad?'var(--red)':'var(--amber)';
+  e.style.background=bad?'rgba(255,61,95,.08)':'rgba(255,182,39,.07)';
+  e.style.color=bad?'#ffc2ce':'#e0c78a';}
+function camRow(state,text){return `<div class="${state}"><b>${state==='ok'?'✔':state==='no'?'✕':'…'}</b><span>${text}</span></div>`;}
+async function camDiagnose(){
+  const box=$('#camChecks');const secure=window.isSecureContext===true;
+  const api=!!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia);
+  let perm='unknown';
+  try{if(navigator.permissions){const st=await navigator.permissions.query({name:'camera'});perm=st.state;}}catch(e){}
+  let cams=-1;
+  try{if(navigator.mediaDevices&&navigator.mediaDevices.enumerateDevices){
+    const ds=await navigator.mediaDevices.enumerateDevices();cams=ds.filter(d=>d.kind==='videoinput').length;}}catch(e){}
+  box.innerHTML=
+    camRow(secure?'ok':'no',secure?'หน้านี้เปิดในโหมดปลอดภัย ใช้กล้องได้':'หน้านี้ไม่ใช่โหมดปลอดภัย เบราว์เซอร์จะไม่ยอมให้ใช้กล้อง')+
+    camRow(api?'ok':'no',api?'เบราว์เซอร์รองรับการเข้าถึงกล้อง':'เบราว์เซอร์ปิดกั้น API กล้องในหน้านี้')+
+    camRow(cams>0?'ok':cams===0?'no':'wait',cams>0?`พบกล้องในเครื่อง ${cams} ตัว`:cams===0?'ไม่พบกล้องที่ต่ออยู่':'ยังตรวจไม่ได้ ต้องขอสิทธิ์ก่อน')+
+    camRow(perm==='granted'?'ok':perm==='denied'?'no':'wait',
+      perm==='granted'?'เคยอนุญาตให้ใช้กล้องแล้ว':perm==='denied'?'สิทธิ์กล้องถูกปฏิเสธไว้ ต้องแก้ที่แถบที่อยู่ของเบราว์เซอร์':'ยังไม่ได้ขอสิทธิ์ในรอบนี้');
+  if(!secure||!api){
+    camMsg('เปิดไฟล์เกมด้วยวิธีที่เบราว์เซอร์ถือว่าปลอดภัยก่อน แล้วกล้องจะใช้ได้:<br>'+
+      '• เปิดผ่าน <b>Live Server</b> ใน VS Code<br>'+
+      '• หรือรัน <b>python -m http.server</b> ในโฟลเดอร์เกม แล้วเปิด <b>http://localhost:8000</b><br>'+
+      '• ถ้าดูอยู่ในหน้าต่างพรีวิว ให้กดดาวน์โหลดไฟล์แล้วเปิดในเบราว์เซอร์โดยตรง<br>'+
+      'ระหว่างนี้เล่นด้วยเมาส์หรือจอสัมผัสได้ครบทุกฟีเจอร์',true);
+    $('#btnAllowCam').disabled=true;
+  }else{$('#btnAllowCam').disabled=false;
+    camMsg(perm==='denied'
+      ? 'สิทธิ์กล้องถูกปฏิเสธไว้ก่อนหน้านี้ กดไอคอนกล้อง 🎥 หรือรูปแม่กุญแจ 🔒 ที่แถบที่อยู่ด้านบน แล้วเลือก “อนุญาต” จากนั้นกดปุ่มด้านล่างอีกครั้ง'
+      : 'กดปุ่มด้านล่าง แล้วเลือก “อนุญาต / Allow” ในกล่องที่เบราว์เซอร์แสดงขึ้นมา');}
+}
+function openCamPermission(){
+  if(Hand.on){Hand.stop();toast('ปิดกล้องแล้ว กลับมาใช้เมาส์ตามปกติ');return;}
+  $('#ovCam').classList.add('on');camDiagnose();
+}
+
 const Hand={
   on:false,loading:false,hands:null,video:$('#camVid'),cvs:$('#camCv'),ctx:null,
   x:innerWidth/2,y:innerHeight/2,tx:innerWidth/2,ty:innerHeight/2,pinch:false,ratio:1,
-  async toggle(){
-    if(this.on){this.stop();return;}
-    if(this.loading)return;
-    this.loading=true;$('#cam').classList.add('on');$('#camState').textContent='กำลังโหลดโมเดล…';
+  async start(){
+    if(this.on||this.loading)return;
+    this.loading=true;$('#btnAllowCam').disabled=true;
+    // 1) ขอสิทธิ์กล้องก่อนเป็นอันดับแรก เพื่อให้เบราว์เซอร์เด้งกล่องถามทันทีจากการกดปุ่ม
+    let stream;
+    camMsg('กำลังขออนุญาตใช้กล้อง… ให้เลือก “อนุญาต / Allow” ในกล่องที่เบราว์เซอร์แสดงขึ้นมา');
+    try{
+      stream=await navigator.mediaDevices.getUserMedia({video:{width:{ideal:480},height:{ideal:360},facingMode:'user'}});
+    }catch(e){
+      this.loading=false;$('#btnAllowCam').disabled=false;
+      const n=e&&e.name,m=((e&&e.message)||'').toLowerCase();
+      if(m.includes('permissions policy')||m.includes('disallowed'))
+        camMsg('หน้าต่างที่กำลังแสดงเกมอยู่ไม่อนุญาตให้ใช้กล้อง — กดดาวน์โหลดไฟล์เกมแล้วเปิดในเบราว์เซอร์โดยตรง กล้องจะใช้ได้ทันที',true);
+      else if(n==='NotAllowedError'||n==='SecurityError')
+        camMsg('สิทธิ์กล้องถูกปฏิเสธ — กดไอคอนกล้อง 🎥 หรือแม่กุญแจ 🔒 ที่แถบที่อยู่ด้านบนของเบราว์เซอร์ เลือก “อนุญาต” แล้วกดปุ่มนี้อีกครั้ง',true);
+      else if(n==='NotFoundError'||n==='DevicesNotFoundError')
+        camMsg('ไม่พบกล้องในเครื่อง ลองเสียบเว็บแคมแล้วกดใหม่อีกครั้ง',true);
+      else if(n==='NotReadableError'||n==='TrackStartError')
+        camMsg('กล้องกำลังถูกโปรแกรมอื่นใช้งานอยู่ (เช่น Zoom, Meet, OBS) ปิดโปรแกรมนั้นก่อนแล้วลองใหม่',true);
+      else camMsg('เปิดกล้องไม่สำเร็จ: '+(n||'ไม่ทราบสาเหตุ')+' — เล่นด้วยเมาส์หรือจอสัมผัสต่อได้ตามปกติ',true);
+      camDiagnose();return;
+    }
+    // 2) ได้สิทธิ์แล้วค่อยโหลดโมเดลตรวจจับมือ
+    $('#cam').classList.add('on');$('#camState').textContent='กำลังโหลดโมเดล…';
+    document.documentElement.style.setProperty('--camop',CAMOPS[camDim]);
+    try{if(document.documentElement.requestFullscreen&&!document.fullscreenElement)
+      await document.documentElement.requestFullscreen();}catch(e){}
+    camMsg('อนุญาตเรียบร้อย ✔ กำลังโหลดโมเดลตรวจจับมือ…');
     try{
       await loadScript('https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1646424915/hands.js');
       if(!window.Hands)throw new Error('no lib');
-      const stream=await navigator.mediaDevices.getUserMedia({video:{width:480,height:360,facingMode:'user'}});
       this.video.srcObject=stream;await this.video.play();
       this.ctx=this.cvs.getContext('2d');
       this.hands=new window.Hands({locateFile:f=>`https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1646424915/${f}`});
       this.hands.setOptions({maxNumHands:1,modelComplexity:0,minDetectionConfidence:.6,minTrackingConfidence:.6});
       this.hands.onResults(r=>this.onResults(r));
       this.on=true;this.loading=false;
-      $('#handCursor').classList.add('on');$('#camState').textContent='ยกมือเข้ากล้อง';
-      toast('เปิดโหมดมือแล้ว — จีบนิ้วโป้งกับนิ้วชี้เพื่อคีบบล็อก');
-      this.loop();
+      camLayers(true);$('#camState').textContent='ยกมือเข้ากล้อง';
+      $('#ovCam').classList.remove('on');$('#btnAllowCam').disabled=false;
+      toast('เปิดโหมดมือเต็มจอแล้ว — จีบนิ้วโป้งกับนิ้วชี้เพื่อคีบบล็อก คลายนิ้วเพื่อวาง');
+      this.loop().catch(()=>{});
     }catch(e){
-      this.loading=false;$('#cam').classList.remove('on');
-      toast('เปิดกล้องไม่ได้ — ใช้เมาส์หรือนิ้วลากวางได้ตามปกติ');
+      this.loading=false;$('#btnAllowCam').disabled=false;
+      stream.getTracks().forEach(t=>t.stop());
+      camLayers(false);
+      camMsg('กล้องเปิดได้แล้ว แต่โหลดโมเดลตรวจจับมือไม่สำเร็จ — โหมดนี้ต้องใช้อินเทอร์เน็ตในการโหลดครั้งแรก ตรวจการเชื่อมต่อแล้วลองใหม่ ระหว่างนี้เล่นด้วยเมาส์ได้ครบทุกฟีเจอร์',true);
     }
   },
   stop(){
-    this.on=false;$('#cam').classList.remove('on');$('#handCursor').classList.remove('on');
+    this.on=false;camLayers(false);
     const st=this.video.srcObject;if(st)st.getTracks().forEach(t=>t.stop());
     this.video.srcObject=null;if(this.pinch){onUp(this.x,this.y);this.pinch=false;}
+    try{if(document.fullscreenElement)document.exitFullscreen();}catch(e){}
   },
   async loop(){
     if(!this.on)return;
     try{if(this.video.readyState>=2)await this.hands.send({image:this.video});}catch(e){}
-    requestAnimationFrame(()=>this.loop());
+    if(this.on)requestAnimationFrame(()=>this.loop().catch(()=>{}));
   },
   onResults(res){
-    const c=this.ctx,W=this.cvs.width,H=this.cvs.height;
+    const c=this.ctx,W=innerWidth,H=innerHeight;
     c.clearRect(0,0,W,H);
     const lm=res.multiHandLandmarks&&res.multiHandLandmarks[0];
-    if(!lm){$('#camState').textContent='ไม่พบมือ';$('#camPinch').textContent='';return;}
-    // skeleton (mirrored)
-    const P=i=>({x:(1-lm[i].x)*W,y:lm[i].y*H});
+    if(!lm){$('#camState').textContent='ไม่พบมือ — ยกมือให้เห็นเต็มฝ่ามือ';$('#camPinch').textContent='';
+      $('#handTip').textContent='ยกมือเข้ากล้อง';return;}
+    // แปลงพิกัดชุดเดียวกับเคอร์เซอร์ เพื่อให้โครงมือกับปลายนิ้วตรงตำแหน่งกันพอดี
+    const P=i=>({x:((1-lm[i].x-.16)/.68)*W,y:((lm[i].y-.14)/.7)*H});
     const bones=[[0,1],[1,2],[2,3],[3,4],[0,5],[5,6],[6,7],[7,8],[5,9],[9,10],[10,11],[11,12],
       [9,13],[13,14],[14,15],[15,16],[13,17],[17,18],[18,19],[19,20],[0,17]];
-    c.strokeStyle='rgba(58,217,255,.85)';c.lineWidth=1.6;
+    c.lineCap='round';c.lineJoin='round';
+    c.strokeStyle='rgba(4,9,15,.55)';c.lineWidth=8;
     bones.forEach(([a,b])=>{const p=P(a),q=P(b);c.beginPath();c.moveTo(p.x,p.y);c.lineTo(q.x,q.y);c.stroke();});
-    c.fillStyle='#26ff9c';[4,8].forEach(i=>{const p=P(i);c.beginPath();c.arc(p.x,p.y,3.6,0,7);c.fill();});
+    c.strokeStyle=this.pinch?'rgba(38,255,156,.95)':'rgba(58,217,255,.9)';c.lineWidth=3.4;
+    c.shadowBlur=12;c.shadowColor=this.pinch?'#26ff9c':'#3ad9ff';
+    bones.forEach(([a,b])=>{const p=P(a),q=P(b);c.beginPath();c.moveTo(p.x,p.y);c.lineTo(q.x,q.y);c.stroke();});
+    c.shadowBlur=0;
+    c.fillStyle='#cfe3f2';for(let i=0;i<21;i++){const p=P(i);c.beginPath();c.arc(p.x,p.y,3.2,0,7);c.fill();}
+    // เน้นนิ้วโป้งกับนิ้วชี้ และเส้นระยะจีบนิ้ว
+    const t4=P(4),t8=P(8);
+    c.strokeStyle=this.pinch?'#26ff9c':'rgba(255,182,39,.85)';c.lineWidth=2;c.setLineDash([5,5]);
+    c.beginPath();c.moveTo(t4.x,t4.y);c.lineTo(t8.x,t8.y);c.stroke();c.setLineDash([]);
+    c.fillStyle=this.pinch?'#26ff9c':'#ffb627';
+    [t4,t8].forEach(p=>{c.beginPath();c.arc(p.x,p.y,7,0,7);c.fill();});
     // pinch ratio
     const d=(a,b)=>Math.hypot(lm[a].x-lm[b].x,lm[a].y-lm[b].y);
     const span=Math.max(.001,d(0,9));
@@ -1843,8 +2214,9 @@ const Hand={
     const cur=$('#handCursor');
     cur.style.left=this.x+'px';cur.style.top=this.y+'px';
     cur.classList.toggle('pinch',this.pinch);
-    $('#camState').textContent=this.pinch?'คีบอยู่':'พร้อมใช้งาน';
-    $('#camPinch').textContent=this.ratio.toFixed(2);
+    $('#camState').textContent=this.pinch?'กำลังคีบบล็อก':'พร้อมใช้งาน · จีบนิ้วเพื่อคีบ';
+    $('#camPinch').textContent='PINCH '+this.ratio.toFixed(2);
+    $('#handTip').textContent=drag?'คลายนิ้วเพื่อวาง':(this.pinch?'คีบอยู่':'จีบนิ้วเพื่อคีบ');
     if(this.pinch&&!wasPinch){SFX.init();onDown(this.x,this.y,true);}
     else if(this.pinch)onMove(this.x,this.y);
     else if(!this.pinch&&wasPinch)onUp(this.x,this.y);
@@ -1899,7 +2271,12 @@ $('#btnReset').addEventListener('click',()=>{
   G.history=[];updateFlowTag();SFX.click();toast('คืนบล็อกที่ยังไม่ล็อกกลับคลังแล้ว');
 });
 $('#btnHint').addEventListener('click',useHint);
-$('#btnCam').addEventListener('click',()=>{SFX.init();Hand.toggle();});
+$('#btnCam').addEventListener('click',()=>{SFX.init();openCamPermission();});
+$('#btnAllowCam').addEventListener('click',()=>{SFX.init();Hand.start().catch(()=>{});});
+$('#btnNoCam').addEventListener('click',()=>{$('#ovCam').classList.remove('on');SFX.click();});
+$('#btnCamDim').addEventListener('click',()=>{camDim=(camDim+1)%CAMOPS.length;
+  document.documentElement.style.setProperty('--camop',CAMOPS[camDim]);SFX.click();
+  toast('ความสว่างภาพกล้อง: '+Math.round(CAMOPS[camDim]*100)+'%');});
 $('#btnMute').addEventListener('click',e=>{SFX.init();SFX.muted=!SFX.muted;e.target.textContent=SFX.muted?'🔇':'🔊';});
 addEventListener('keydown',e=>{
   if(e.key==='Enter'&&G.started&&!G.running)runProgram();
@@ -1912,11 +2289,18 @@ addEventListener('keydown',e=>{
   }
 });
 
+/* ตาข่ายกันพลาด: ถ้ามี error หลุดมา ให้เกมเล่นต่อได้แทนที่จะค้างทั้งหน้า */
+addEventListener('unhandledrejection',e=>{
+  console.warn('CodeFlow: promise error',e.reason);e.preventDefault();
+  if(G.running)stopRun('ERROR');
+});
+addEventListener('error',e=>{console.warn('CodeFlow: error',e.message);});
+
 /* render loop */
 let last=performance.now();
 function frame(now){
   const dt=Math.min(.05,(now-last)/1000);last=now;
-  Sim.update(dt);Sim.draw();
+  try{Sim.update(dt);Sim.draw();}catch(e){console.warn('CodeFlow: draw',e);}
   requestAnimationFrame(frame);
 }
 resize();requestAnimationFrame(frame);
